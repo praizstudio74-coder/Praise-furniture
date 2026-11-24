@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | PRAISE FURNITURE - The Art of Beautiful Living</title>
+  <meta name="description" content="Learn about Praise Furniture, our heritage of artisan craftsmanship, dedication to comfort, and vision for timeless interior living solutions." />
+
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            taupe: '#514744',
+            mocha: '#A58D7D',
+            sand: '#D2BBA5',
+            'soft-beige': '#EAD9C7',
+            ivory: '#F5EDE4',
+            espresso: '#231C1A',
+            'deep-charcoal': '#161312',
+            gold: '#C5A059',
+            'gold-light': '#DFBA8E',
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            heading: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="bg-espresso text-ivory antialiased selection:bg-gold selection:text-espresso">
+
+  <!-- ==================== HEADER NAVIGATION ==================== -->
+  <header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        
+        <!-- Brand Logo -->
+        <a href="index.html" class="flex items-center gap-3 group focus:outline-none">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-mocha flex items-center justify-center p-0.5 shadow-lg shadow-gold/20">
+            <div class="w-full h-full bg-espresso rounded-[7px] flex items-center justify-center border border-gold/40 group-hover:border-gold transition-colors">
+              <span class="font-serif text-lg font-bold text-gold tracking-wider">PF</span>
+            </div>
+          </div>
+          <div>
+            <span class="font-serif text-2xl font-bold tracking-widest text-ivory block uppercase group-hover:text-gold transition-colors">PRAISE</span>
+            <span class="text-[9px] uppercase tracking-[0.28em] text-sand/80 block font-sans -mt-1">Furniture Showroom</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden lg:flex items-center gap-8 text-xs uppercase tracking-widest font-medium">
+          <a href="index.html" class="text-sand/80 hover:text-gold transition-colors py-1">Home</a>
+          <a href="about.html" class="text-gold font-semibold transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-gold">About Us</a>
+          <a href="services.html" class="text-sand/80 hover:text-gold transition-colors py-1">Our Services</a>
+          <a href="index.html#collection" class="text-sand/80 hover:text-gold transition-colors py-1">Collections</a>
+          <a href="contact.html" class="text-sand/80 hover:text-gold transition-colors py-1">Contact Us</a>
+        </nav>
+
+        <!-- Header Actions: Currency, Search, Wishlist, Cart & CTA -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          
+          <div class="relative hidden sm:block">
+            <select onchange="setCurrency(this.value)" class="bg-espresso/80 border border-mocha/30 rounded px-2.5 py-1.5 text-xs text-sand font-medium hover:border-gold focus:outline-none cursor-pointer">
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+            </select>
+          </div>
+
+          <button onclick="openSearch()" class="p-2 text-sand/80 hover:text-gold transition-colors rounded-full hover:bg-taupe/30" title="Search catalog">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </button>
+
+          <button onclick="window.location.href='index.html#collection'" class="relative p-2 text-sand/80 hover:text-gold transition-colors rounded-full hover:bg-taupe/30" title="Wishlist">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            <span class="wishlist-badge-count absolute -top-1 -right-1 w-4 h-4 rounded-full bg-mocha text-white text-[9px] font-bold flex items-center justify-center hidden">0</span>
+          </button>
+
+          <button onclick="openCart()" class="relative p-2 text-sand/80 hover:text-gold transition-colors rounded-full hover:bg-taupe/30" title="Shopping Bag">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+            <span class="cart-badge-count absolute -top-1 -right-1 w-4 h-4 rounded-full bg-gold text-espresso text-[9px] font-black flex items-center justify-center hidden">0</span>
+          </button>
+
+          <button onclick="openConsultationModal()" class="hidden md:inline-flex btn-luxury-gold px-4 sm:px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider">
+            Consultation
+          </button>
+
+          <button id="mobile-menu-toggle" class="lg:hidden p-2 text-sand hover:text-gold transition-colors" aria-label="Toggle menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Drawer -->
+  <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"></div>
+  <aside id="mobile-menu-drawer" class="fixed top-0 left-0 w-80 max-w-[85vw] h-full bg-espresso border-r border-mocha/30 z-50 -translate-x-full transition-transform duration-400 ease-out flex flex-col justify-between p-6 lg:hidden">
+    <div>
+      <div class="flex items-center justify-between pb-6 border-b border-mocha/20">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded bg-gold/20 border border-gold flex items-center justify-center font-serif font-bold text-gold">PF</div>
+          <span class="font-serif text-xl tracking-widest text-ivory uppercase">Praise</span>
+        </div>
+        <button id="mobile-menu-close" class="text-sand hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <nav class="py-8 space-y-5 text-sm uppercase tracking-widest font-medium">
+        <a href="index.html" class="block text-sand hover:text-gold transition-colors">Home</a>
+        <a href="about.html" class="block text-gold font-bold">About Us</a>
+        <a href="services.html" class="block text-sand hover:text-gold transition-colors">Our Services</a>
+        <a href="index.html#collection" class="block text-sand hover:text-gold transition-colors">Featured Collection</a>
+        <a href="contact.html" class="block text-sand hover:text-gold transition-colors">Contact Us</a>
+      </nav>
+    </div>
+
+    <div class="pt-6 border-t border-mocha/20 space-y-4">
+      <button onclick="openConsultationModal()" class="w-full btn-luxury-gold py-3 rounded-lg text-xs font-bold uppercase tracking-wider">
+        Book Design Consultation
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==================== ABOUT US HERO BANNER ==================== -->
+  <section class="relative pt-40 pb-28 bg-espresso overflow-hidden">
+    <!-- Ambient Orbs -->
+    <div class="ambient-glow-orb glow-taupe w-[600px] h-[600px] -top-20 -left-20"></div>
+    <div class="ambient-glow-orb glow-gold w-[450px] h-[450px] -bottom-20 -right-20"></div>
+    
+    <!-- Dot Matrix Accent (from flyer) -->
+    <div class="absolute top-36 right-16 w-32 h-20 dot-matrix opacity-35 pointer-events-none hidden md:block"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <span class="text-xs font-semibold uppercase tracking-[0.28em] text-gold block mb-3">Heritage & Philosophy</span>
+      <!-- Headline (Verbatim requirement) -->
+      <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold text-ivory mb-6 leading-tight">
+        The Art of <span class="italic text-gold font-normal">Beautiful Living</span>
+      </h1>
+      <!-- Subheading (Verbatim requirement) -->
+      <p class="text-base sm:text-xl text-sand/90 font-light max-w-2xl mx-auto leading-relaxed">
+        Creating timeless furniture experiences for modern homes.
+      </p>
+      <div class="w-20 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-8"></div>
+    </div>
+  </section>
+
+  <!-- Wave Divider -->
+  <div class="wave-divider -mt-1 z-20">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,60 L1200,120 L0,120 Z" fill="#514744" stroke="#C5A059" stroke-width="1.2" opacity="0.6"></path>
+    </svg>
+  </div>
+
+  <!-- ==================== OUR STORY (Dark Taupe Section) ==================== -->
+  <section class="py-24 bg-dark-taupe relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Story Copy (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-espresso/50 border border-gold/40 text-gold text-xs font-semibold uppercase tracking-widest">
+            <span>Our Foundation</span>
+          </div>
+
+          <h2 class="font-serif text-3xl sm:text-5xl font-bold text-ivory leading-tight">
+            A Sanctuary Born from <br/><span class="italic text-gold font-normal">Artisanal Devotion</span>
+          </h2>
+
+          <div class="space-y-4 text-xs sm:text-base text-sand/90 font-light leading-relaxed">
+            <p>
+              <strong>Praise Furniture</strong> was established as a premier home furniture showroom dedicated to providing beautiful, comfortable, and elegant furniture solutions. We began with a singular conviction: that modern interiors should never sacrifice sensory comfort for architectural beauty.
+            </p>
+            <p>
+              Drawing inspiration from classic European craftsmanship and organic modernism, our collections are meticulously developed in close collaboration with world-class furniture designers, master woodworkers, and visionary interior architects. Every silhouette is an intentional study in balance, tactile richness, and enduring proportion.
+            </p>
+            <p>
+              Whether furnishing an expansive grand penthouse living room, curating a restorative master bedroom suite with our signature bolster platform beds, or configuring a bespoke marble dining hall, Praise Furniture ensures your living space is a timeless reflection of refined living.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-6 pt-6 border-t border-mocha/30">
+            <div>
+              <span class="block font-serif text-3xl sm:text-4xl font-bold text-gold">25+</span>
+              <span class="text-[11px] uppercase tracking-wider text-sand/80">Years Combined Atelier Mastery</span>
+            </div>
+            <div>
+              <span class="block font-serif text-3xl sm:text-4xl font-bold text-gold">4,200+</span>
+              <span class="text-[11px] uppercase tracking-wider text-sand/80">Luxury Homes Furnished</span>
+            </div>
+            <div>
+              <span class="block font-serif text-3xl sm:text-4xl font-bold text-gold">100%</span>
+              <span class="text-[11px] uppercase tracking-wider text-sand/80">Solid Natural Hardwoods</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arch Cutout Photography (5 cols - directly inspired by uploaded flyer layout) -->
+        <div class="lg:col-span-5 relative">
+          <div class="relative mx-auto max-w-md">
+            <!-- Arch framed room image -->
+            <div class="arch-mask aspect-[4/5] bg-espresso border-2 border-gold/40 shadow-2xl overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85" alt="Praise Furniture Atelier Living Room" class="w-full h-full object-cover" />
+            </div>
+
+            <!-- Overlapping flyer badge accent -->
+            <div class="absolute -bottom-6 -left-6 p-5 rounded-2xl bg-espresso/95 border border-gold/50 shadow-2xl max-w-xs">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center text-gold">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div>
+                  <h5 class="text-xs font-serif font-bold text-ivory">Certified Master Ébénisterie</h5>
+                  <p class="text-[10px] text-sand/70">Hand-selected kiln dried woods</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MISSION & VISION (Alternating Cream Luxury Section) ==================== -->
+  <section class="py-24 bg-cream-luxury relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
+        
+        <!-- Our Mission Card -->
+        <div class="p-8 sm:p-12 rounded-3xl bg-white border border-sand/30 shadow-xl flex flex-col justify-between">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-taupe/10 border border-taupe/20 flex items-center justify-center text-taupe mb-6">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <span class="text-xs uppercase tracking-widest text-mocha font-bold block mb-2">Our Guiding Purpose</span>
+            <h3 class="font-serif text-3xl sm:text-4xl font-bold text-espresso mb-4">Our Mission</h3>
+            <p class="text-sm sm:text-base text-subtle leading-relaxed font-light">
+              "To help customers create beautiful and comfortable living spaces through quality furniture and thoughtful design."
+            </p>
+          </div>
+          <div class="pt-8 mt-6 border-t border-sand/20 text-xs text-taupe/80 font-medium">
+            Rooted in exceptional comfort, genuine ergonomics, and bespoke material integrity.
+          </div>
+        </div>
+
+        <!-- Our Vision Card -->
+        <div class="p-8 sm:p-12 rounded-3xl bg-white border border-sand/30 shadow-xl flex flex-col justify-between">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-gold/15 border border-gold/30 flex items-center justify-center text-gold mb-6">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </div>
+            <span class="text-xs uppercase tracking-widest text-mocha font-bold block mb-2">The Destination</span>
+            <h3 class="font-serif text-3xl sm:text-4xl font-bold text-espresso mb-4">Our Vision</h3>
+            <p class="text-sm sm:text-base text-subtle leading-relaxed font-light">
+              "To become a trusted destination for elegant home furniture and inspiring interior solutions."
+            </p>
+          </div>
+          <div class="pt-8 mt-6 border-t border-sand/20 text-xs text-taupe/80 font-medium">
+            Bridging architectural distinction with seamless white-glove customer delivery worldwide.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== OUR VALUES (Dark Luxury Section) ==================== -->
+  <section class="py-24 bg-espresso relative overflow-hidden">
+    <!-- Ambient Orb -->
+    <div class="ambient-glow-orb glow-taupe w-[500px] h-[500px] top-1/4 -right-20"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-gold block mb-2">Our Fundamental Tenets</span>
+        <h2 class="font-serif text-3xl sm:text-5xl font-bold text-ivory">Our Core Values</h2>
+        <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-4 mb-4"></div>
+        <p class="text-xs sm:text-sm text-sand/80">
+          The non-negotiable principles guiding every joint, stitch, design blueprint, and showroom interaction.
+        </p>
+      </div>
+
+      <!-- 5 Values Grid (Verbatim requirement: Quality, Creativity, Comfort, Customer Satisfaction, Timeless Elegance) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        
+        <!-- Value 1: Quality -->
+        <div class="luxury-card p-6 rounded-2xl flex flex-col justify-between group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-taupe/40 border border-gold/30 flex items-center justify-center text-gold mb-4 group-hover:scale-110 transition-transform">
+              <span class="font-serif font-bold text-xl">01</span>
+            </div>
+            <h4 class="font-serif text-2xl text-ivory mb-2 group-hover:text-gold transition-colors">Quality</h4>
+            <p class="text-xs text-sand/70 leading-relaxed">
+              Zero tolerance for shortcut craftsmanship. From kiln-dried hardwoods to full-grain aniline leathers.
+            </p>
+          </div>
+          <span class="text-[10px] uppercase tracking-wider text-gold/70 mt-4 block">Enduring Craft</span>
+        </div>
+
+        <!-- Value 2: Creativity -->
+        <div class="luxury-card p-6 rounded-2xl flex flex-col justify-between group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-taupe/40 border border-gold/30 flex items-center justify-center text-gold mb-4 group-hover:scale-110 transition-transform">
+              <span class="font-serif font-bold text-xl">02</span>
+            </div>
+            <h4 class="font-serif text-2xl text-ivory mb-2 group-hover:text-gold transition-colors">Creativity</h4>
+            <p class="text-xs text-sand/70 leading-relaxed">
+              Bespoke geometries, fluted textures, and sculptural silhouettes that transform ordinary spaces into fine art.
+            </p>
+          </div>
+          <span class="text-[10px] uppercase tracking-wider text-gold/70 mt-4 block">Sculptural Form</span>
+        </div>
+
+        <!-- Value 3: Comfort -->
+        <div class="luxury-card p-6 rounded-2xl flex flex-col justify-between group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-taupe/40 border border-gold/30 flex items-center justify-center text-gold mb-4 group-hover:scale-110 transition-transform">
+              <span class="font-serif font-bold text-xl">03</span>
+            </div>
+            <h4 class="font-serif text-2xl text-ivory mb-2 group-hover:text-gold transition-colors">Comfort</h4>
+            <p class="text-xs text-sand/70 leading-relaxed">
+              True luxury is sensory ease. Down-blend cushion cores and soothing tactile fabrics engineered for living.
+            </p>
+          </div>
+          <span class="text-[10px] uppercase tracking-wider text-gold/70 mt-4 block">Sensory Ease</span>
+        </div>
+
+        <!-- Value 4: Customer Satisfaction -->
+        <div class="luxury-card p-6 rounded-2xl flex flex-col justify-between group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-taupe/40 border border-gold/30 flex items-center justify-center text-gold mb-4 group-hover:scale-110 transition-transform">
+              <span class="font-serif font-bold text-xl">04</span>
+            </div>
+            <h4 class="font-serif text-2xl text-ivory mb-2 group-hover:text-gold transition-colors">Customer Satisfaction</h4>
+            <p class="text-xs text-sand/70 leading-relaxed">
+              White-glove placement, personal design advisors, and long-term structural guarantees for complete peace of mind.
+            </p>
+          </div>
+          <span class="text-[10px] uppercase tracking-wider text-gold/70 mt-4 block">White-Glove Care</span>
+        </div>
+
+        <!-- Value 5: Timeless Elegance -->
+        <div class="luxury-card p-6 rounded-2xl flex flex-col justify-between group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-taupe/40 border border-gold/30 flex items-center justify-center text-gold mb-4 group-hover:scale-110 transition-transform">
+              <span class="font-serif font-bold text-xl">05</span>
+            </div>
+            <h4 class="font-serif text-2xl text-ivory mb-2 group-hover:text-gold transition-colors">Timeless Elegance</h4>
+            <p class="text-xs text-sand/70 leading-relaxed">
+              Designs that transcend passing fads to maintain their beauty, relevance, and prestige across generations.
+            </p>
+          </div>
+          <span class="text-[10px] uppercase tracking-wider text-gold/70 mt-4 block">Enduring Legacy</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== WHY OUR CUSTOMERS CHOOSE US (Alternating Cream & Dark Section) ==================== -->
+  <section class="py-24 bg-cream-luxury text-espresso relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-mocha block mb-2">The Praise Hallmarks</span>
+        <h2 class="font-serif text-3xl sm:text-5xl font-bold text-espresso">Why Our Customers Choose Us</h2>
+        <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-mocha to-transparent mx-auto mt-4 mb-4"></div>
+        <p class="text-xs sm:text-sm text-subtle">
+          From residential estates to modern urban penthouses, our clients rely on our unyielding devotion to craftsmanship and customer care.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <div class="p-8 rounded-2xl bg-white border border-sand/40 shadow-lg text-center space-y-4">
+          <div class="w-14 h-14 mx-auto rounded-full bg-taupe/10 flex items-center justify-center text-taupe">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879a3 3 0 11-4.242-4.242L11.757 4.757a3 3 0 114.243 4.243L13.12 11.88"/></svg>
+          </div>
+          <h4 class="font-serif text-2xl text-espresso font-bold">Uncompromising Craftsmanship</h4>
+          <p class="text-xs text-subtle leading-relaxed">
+            Traditional mortise-and-tenon joints, blind-stitched Italian leather seams, and hand-rubbed wax oil finishes.
+          </p>
+        </div>
+
+        <div class="p-8 rounded-2xl bg-white border border-sand/40 shadow-lg text-center space-y-4">
+          <div class="w-14 h-14 mx-auto rounded-full bg-taupe/10 flex items-center justify-center text-taupe">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <h4 class="font-serif text-2xl text-espresso font-bold">Architectural Aesthetics</h4>
+          <p class="text-xs text-subtle leading-relaxed">
+            Every curve and proportion has been calibrated by architectural interior designers to harmonize with modern spaces.
+          </p>
+        </div>
+
+        <div class="p-8 rounded-2xl bg-white border border-sand/40 shadow-lg text-center space-y-4">
+          <div class="w-14 h-14 mx-auto rounded-full bg-taupe/10 flex items-center justify-center text-taupe">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </div>
+          <h4 class="font-serif text-2xl text-espresso font-bold">Dedicated Concierge</h4>
+          <p class="text-xs text-subtle leading-relaxed">
+            One-on-one personal design consultations, fabric swatch delivery, and tailored spatial floor planning.
+          </p>
+        </div>
+
+        <div class="p-8 rounded-2xl bg-white border border-sand/40 shadow-lg text-center space-y-4">
+          <div class="w-14 h-14 mx-auto rounded-full bg-taupe/10 flex items-center justify-center text-taupe">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h4 class="font-serif text-2xl text-espresso font-bold">White-Glove Guarantee</h4>
+          <p class="text-xs text-subtle leading-relaxed">
+            Insured transit, scheduled room placement, assembly, packaging clearance, and our comprehensive 10-year warranty.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== CALL TO ACTION ==================== -->
+  <section class="py-24 bg-espresso text-center relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <span class="text-xs uppercase tracking-widest text-gold font-bold block mb-3">Begin Your Transformation</span>
+      <h2 class="font-serif text-3xl sm:text-5xl font-bold text-ivory mb-6">Experience the Praise Showroom</h2>
+      <p class="text-xs sm:text-base text-sand/80 max-w-xl mx-auto mb-8 font-light">
+        Schedule a private consultation with our interior consultants or explore our online collections.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <button onclick="openConsultationModal()" class="btn-luxury-gold px-8 py-4 rounded-full text-xs font-bold tracking-widest uppercase shadow-2xl">
+          Request a Consultation
+        </button>
+        <a href="index.html#collection" class="btn-luxury-outline px-8 py-4 rounded-full text-xs font-bold tracking-widest uppercase">
+          Explore Our Collection
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== GLOBAL FOOTER ==================== -->
+  <footer class="bg-deep-charcoal border-t border-mocha/30 pt-16 pb-12 text-sand/80 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16 border-b border-mocha/20">
+        
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-mocha flex items-center justify-center p-0.5">
+              <div class="w-full h-full bg-espresso rounded-[7px] flex items-center justify-center border border-gold/40">
+                <span class="font-serif text-lg font-bold text-gold">PF</span>
+              </div>
+            </div>
+            <div>
+              <span class="font-serif text-2xl font-bold tracking-widest text-ivory block uppercase">PRAISE FURNITURE</span>
+              <span class="text-[9px] uppercase tracking-[0.25em] text-sand/70 block">Luxury Showroom & Interiors</span>
+            </div>
+          </div>
+          <p class="text-xs text-sand/70 leading-relaxed max-w-sm">
+            Curators of high-end home furniture, bespoke interior architecture, and timeless living solutions designed for comfort, beauty, and enduring luxury.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xs uppercase tracking-widest text-gold font-bold mb-4">Quick Navigation</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="index.html" class="hover:text-gold transition-colors">Home</a></li>
+            <li><a href="about.html" class="hover:text-gold transition-colors">About Us</a></li>
+            <li><a href="services.html" class="hover:text-gold transition-colors">Our Services</a></li>
+            <li><a href="index.html#collection" class="hover:text-gold transition-colors">Featured Collection</a></li>
+            <li><a href="contact.html" class="hover:text-gold transition-colors">Contact Showroom</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs uppercase tracking-widest text-gold font-bold mb-4">Furniture Collections</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="index.html#collection" class="hover:text-gold transition-colors">Living Room Furniture</a></li>
+            <li><a href="index.html#collection" class="hover:text-gold transition-colors">Bedroom Platform Suites</a></li>
+            <li><a href="index.html#collection" class="hover:text-gold transition-colors">Dining Tables & Chairs</a></li>
+            <li><a href="index.html#collection" class="hover:text-gold transition-colors">Executive Office Suites</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs uppercase tracking-widest text-gold font-bold mb-4">Private Releases</h4>
+          <p class="text-xs text-sand/70 mb-3">Subscribe to receive private preview invitations to new collections.</p>
+          <form class="newsletter-form space-y-2">
+            <input type="email" required placeholder="Enter your email" class="w-full bg-espresso border border-mocha/40 rounded px-3 py-2 text-xs text-ivory placeholder-sand/50 focus:outline-none focus:border-gold" />
+            <button type="submit" class="w-full btn-luxury-gold py-2 rounded text-xs font-semibold tracking-wider uppercase">
+              Subscribe
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-sand/60 gap-4">
+        <div>
+          © 2026 PRAISE FURNITURE. All Rights Reserved. Crafted with Dark Luxury Aesthetics.
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-sand">Privacy Policy</a>
+          <a href="#" class="hover:text-sand">Terms of Service</a>
+          <a href="#" class="hover:text-sand">White-Glove Delivery Policy</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==================== GLOBAL MODALS ==================== -->
+  <!-- Cart Drawer -->
+  <div id="cart-overlay" onclick="closeCart()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 w-full max-w-md h-full bg-espresso border-l border-mocha/30 z-50 translate-x-full transition-transform duration-400 ease-out flex flex-col justify-between shadow-2xl">
+    <div class="p-6 border-b border-mocha/20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <h3 class="font-serif text-2xl text-ivory">Your Shopping Bag</h3>
+      </div>
+      <button onclick="closeCart()" class="text-sand/60 hover:text-ivory p-1">✕</button>
+    </div>
+    <div id="cart-drawer-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+    <div id="cart-drawer-summary" class="p-6 border-t border-mocha/20 bg-deep-charcoal"></div>
+  </aside>
+
+  <!-- Quick View Modal -->
+  <div id="quick-view-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div class="relative w-full max-w-4xl bg-espresso rounded-2xl border border-gold/30 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+      <button onclick="closeQuickView()" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-espresso/80 border border-mocha/40 text-sand hover:text-white flex items-center justify-center">✕</button>
+      <div id="quick-view-content"></div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div id="checkout-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
+    <div class="relative w-full max-w-5xl bg-espresso rounded-3xl border border-gold/40 shadow-2xl my-8 overflow-hidden">
+      <button onclick="closeCheckoutModal()" class="absolute top-6 right-6 z-20 w-9 h-9 rounded-full bg-espresso border border-mocha/40 text-sand hover:text-white flex items-center justify-center">✕</button>
+      <div id="checkout-flow-container"></div>
+    </div>
+  </div>
+
+  <!-- Consultation Modal -->
+  <div id="consultation-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div class="relative w-full max-w-xl bg-espresso rounded-2xl border border-gold/40 shadow-2xl p-6 sm:p-10">
+      <button onclick="closeConsultationModal()" class="absolute top-4 right-4 text-sand hover:text-white p-1">✕</button>
+      <div class="text-center mb-6">
+        <span class="text-xs uppercase tracking-widest text-gold font-bold">Complimentary Atelier Service</span>
+        <h3 class="font-serif text-3xl text-ivory mt-1">Book an Interior Design Consultation</h3>
+        <p class="text-xs text-sand/70 mt-1">Collaborate with our senior interior architects on 3D layout, custom woodworking & styling.</p>
+      </div>
+      <form id="consultation-form" class="space-y-4">
+        <div>
+          <label class="block text-xs text-sand mb-1">Full Name *</label>
+          <input type="text" required placeholder="Lord/Lady Alexander..." class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-sand mb-1">Email *</label>
+            <input type="email" required placeholder="client@residence.com" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+          </div>
+          <div>
+            <label class="block text-xs text-sand mb-1">Phone *</label>
+            <input type="tel" required placeholder="+1 (555) 000-0000" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs text-sand mb-1">Service Required</label>
+          <select id="consultation-service-select" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold">
+            <option value="Modern Home Interior Design">Modern Home Interior Design (Full Residence)</option>
+            <option value="Living Room Interior Design">Living Room Interior Design</option>
+            <option value="Bedroom Interior Design">Bedroom Suite Design</option>
+            <option value="Dining Room Design">Dining Room Design</option>
+            <option value="Office Interior Design">Executive Office Design</option>
+            <option value="Custom Furniture Solutions">Custom Bespoke Furniture Fabrication</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-sand mb-1">Project Scope & Spatial Notes</label>
+          <textarea rows="3" placeholder="Tell us about your home, timeline, square footage, or preferred materials..." class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold"></textarea>
+        </div>
+        <button type="submit" class="w-full btn-luxury-gold py-3.5 rounded-lg text-xs font-bold uppercase tracking-wider">
+          Schedule Design Consultation
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div id="search-modal" class="fixed inset-0 z-50 hidden flex items-start justify-center pt-20 p-4 bg-black/85 backdrop-blur-md">
+    <div class="relative w-full max-w-3xl bg-espresso rounded-2xl border border-gold/40 shadow-2xl p-6">
+      <div class="flex items-center justify-between pb-4 border-b border-mocha/30">
+        <div class="flex items-center gap-3 flex-1">
+          <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="global-search-input" placeholder="Search luxury furniture, sofa, leather bed, marble dining, desk..." class="w-full bg-transparent text-lg text-ivory placeholder-sand/40 focus:outline-none font-serif" />
+        </div>
+        <button onclick="closeSearch()" class="text-sand hover:text-white p-2">✕</button>
+      </div>
+      <div id="search-results-container" class="mt-6 max-h-[60vh] overflow-y-auto"></div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/store.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

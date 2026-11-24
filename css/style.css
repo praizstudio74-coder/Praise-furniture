@@ -1,0 +1,412 @@
+/* ==========================================================================
+   PRAISE FURNITURE - LUXURY DESIGN SYSTEM
+   Dark Luxury Aesthetics: Taupe, Mocha, Warm Sand, Soft Beige, Ivory & Gold
+   ========================================================================== */
+
+:root {
+  --color-dark-taupe: #514744;
+  --color-mocha: #A58D7D;
+  --color-sand: #D2BBA5;
+  --color-soft-beige: #EAD9C7;
+  --color-ivory: #F5EDE4;
+  --color-white: #FFFFFF;
+  --color-espresso: #251D1A;
+  --color-deep-charcoal: #181413;
+  --color-gold: #C5A059;
+  --color-gold-light: #DFBA8E;
+  --color-gold-glow: rgba(197, 160, 89, 0.25);
+  
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-espresso);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-mocha);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+
+/* Base resets & typography */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-espresso);
+  color: var(--color-ivory);
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif-luxury {
+  font-family: var(--font-serif);
+}
+
+.font-heading-luxury {
+  font-family: var(--font-heading);
+}
+
+/* Luxury Gold Gradient Text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #F5EDE4 0%, #DFBA8E 50%, #C5A059 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-sand-gradient {
+  background: linear-gradient(135deg, #FFFFFF 0%, #EAD9C7 50%, #D2BBA5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Luxury Borders & Glows */
+.border-gold-subtle {
+  border-color: rgba(197, 160, 89, 0.3);
+}
+
+.border-mocha-subtle {
+  border-color: rgba(165, 141, 125, 0.25);
+}
+
+.luxury-card {
+  background: linear-gradient(145deg, rgba(81, 71, 68, 0.45) 0%, rgba(37, 29, 26, 0.85) 100%);
+  border: 1px solid rgba(210, 187, 165, 0.18);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  transition: all 0.5s var(--transition-smooth);
+}
+
+.luxury-card:hover {
+  border-color: rgba(223, 186, 142, 0.45);
+  transform: translateY(-6px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 25px rgba(197, 160, 89, 0.15);
+}
+
+.luxury-glass {
+  background: rgba(37, 29, 26, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(210, 187, 165, 0.15);
+}
+
+/* Architectural Motifs from Reference Flyer */
+/* 1. Dot Matrix Grid */
+.dot-matrix {
+  background-image: radial-gradient(rgba(210, 187, 165, 0.35) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.dot-matrix-gold {
+  background-image: radial-gradient(rgba(197, 160, 89, 0.45) 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+}
+
+/* 2. Fluted Architectural Slats Pattern */
+.fluted-slats {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(81, 71, 68, 0.35) 0px,
+    rgba(81, 71, 68, 0.35) 6px,
+    rgba(37, 29, 26, 0.8) 6px,
+    rgba(37, 29, 26, 0.8) 16px
+  );
+}
+
+/* 3. Ambient Orb Glow */
+.ambient-glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glow-taupe {
+  background: radial-gradient(circle, rgba(165, 141, 125, 0.22) 0%, transparent 70%);
+}
+
+.glow-gold {
+  background: radial-gradient(circle, rgba(197, 160, 89, 0.18) 0%, transparent 70%);
+}
+
+/* 4. Arch Cutout Mask */
+.arch-mask {
+  border-radius: 200px 200px 0 0;
+  overflow: hidden;
+}
+
+.arch-mask-horizontal {
+  border-radius: 0 160px 160px 0;
+  overflow: hidden;
+}
+
+/* Organic Wave Divider SVG styles */
+.wave-divider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.wave-divider svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 60px;
+}
+
+@media (min-width: 768px) {
+  .wave-divider svg {
+    height: 90px;
+  }
+}
+
+/* Slider Revolution Hero Styles */
+.hero-slider-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 700px;
+  overflow: hidden;
+}
+
+.hero-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s var(--transition-smooth), visibility 1.2s var(--transition-smooth);
+  z-index: 1;
+}
+
+.hero-slide.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+/* Ken Burns Zoom Effect */
+.slide-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1);
+  transition: transform 9s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.hero-slide.active .slide-bg-image {
+  transform: scale(1.09);
+}
+
+/* Slider Progress Bar */
+.slider-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-mocha), var(--color-gold));
+  width: 0%;
+  z-index: 20;
+}
+
+/* Staggered text transitions in active slide */
+.hero-slide .stagger-el {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s var(--transition-smooth), transform 0.9s var(--transition-smooth);
+}
+
+.hero-slide.active .stagger-el-1 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.hero-slide.active .stagger-el-2 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.45s;
+}
+
+.hero-slide.active .stagger-el-3 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.7s;
+}
+
+.hero-slide.active .stagger-el-4 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.95s;
+}
+
+/* Luxury Button Animations */
+.btn-luxury-gold {
+  position: relative;
+  background: linear-gradient(135deg, #C5A059 0%, #A58D7D 100%);
+  color: #161312;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.4s var(--transition-smooth);
+  box-shadow: 0 8px 24px rgba(197, 160, 89, 0.25);
+  overflow: hidden;
+}
+
+.btn-luxury-gold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transition: 0.6s;
+}
+
+.btn-luxury-gold:hover::before {
+  left: 100%;
+}
+
+.btn-luxury-gold:hover {
+  background: linear-gradient(135deg, #DFBA8E 0%, #C5A059 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(197, 160, 89, 0.4);
+}
+
+.btn-luxury-outline {
+  position: relative;
+  border: 1px solid rgba(210, 187, 165, 0.4);
+  color: var(--color-ivory);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.4s var(--transition-smooth);
+  backdrop-filter: blur(8px);
+}
+
+.btn-luxury-outline:hover {
+  border-color: var(--color-gold);
+  background: rgba(197, 160, 89, 0.12);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+/* Floating Badges */
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float-slow {
+  animation: floatGentle 5s ease-in-out infinite;
+}
+
+/* Pulsing Ambient Orbs */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.08);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+/* Luxury Light Sections */
+.bg-cream-luxury {
+  background-color: var(--color-ivory);
+  color: var(--color-espresso);
+}
+
+.bg-cream-luxury h1,
+.bg-cream-luxury h2,
+.bg-cream-luxury h3,
+.bg-cream-luxury h4 {
+  color: var(--color-espresso);
+}
+
+.bg-cream-luxury .text-subtle {
+  color: #6D5E59;
+}
+
+/* Dark Taupe Section */
+.bg-dark-taupe {
+  background-color: var(--color-dark-taupe);
+  color: var(--color-ivory);
+}
+
+/* Toast Notifications */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 300px;
+  max-width: 420px;
+  background: rgba(29, 23, 20, 0.95);
+  border: 1px solid var(--color-gold);
+  color: var(--color-ivory);
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(197, 160, 89, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  backdrop-filter: blur(12px);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s var(--transition-smooth);
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Accessibility / Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .slide-bg-image {
+    transition: none !important;
+    transform: none !important;
+  }
+}

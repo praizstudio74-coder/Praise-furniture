@@ -1,0 +1,12 @@
+# Dependencies & temporary files
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Local server & batch helpers
+serve.ps1
+tcp-server.ps1
+Launch Website.bat
