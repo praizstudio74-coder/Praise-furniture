@@ -429,3 +429,55 @@ function togglePasswordVisibility(inputId) {
   input.type = input.type === 'password' ? 'text' : 'password';
 }
 
+// --- 12. DOWNLOAD APP MODAL CONTROLS ---
+function openDownloadAppModal() {
+  const modal = document.getElementById('download-app-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+    // Auto detect iOS vs Android
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      switchInstallTab('ios');
+    } else {
+      switchInstallTab('android');
+    }
+  }
+}
+
+function closeDownloadAppModal() {
+  const modal = document.getElementById('download-app-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+}
+
+function switchInstallTab(platform) {
+  const btnIos = document.getElementById('tab-btn-ios');
+  const btnAndroid = document.getElementById('tab-btn-android');
+  const guideIos = document.getElementById('install-guide-ios');
+  const guideAndroid = document.getElementById('install-guide-android');
+
+  if (platform === 'ios') {
+    if (btnIos) {
+      btnIos.className = 'py-2 rounded-lg text-xs font-bold transition-all bg-gold text-espresso shadow';
+    }
+    if (btnAndroid) {
+      btnAndroid.className = 'py-2 rounded-lg text-xs font-bold transition-all text-sand hover:text-ivory';
+    }
+    if (guideIos) guideIos.classList.remove('hidden');
+    if (guideAndroid) guideAndroid.classList.add('hidden');
+  } else {
+    if (btnIos) {
+      btnIos.className = 'py-2 rounded-lg text-xs font-bold transition-all text-sand hover:text-ivory';
+    }
+    if (btnAndroid) {
+      btnAndroid.className = 'py-2 rounded-lg text-xs font-bold transition-all bg-gold text-espresso shadow';
+    }
+    if (guideIos) guideIos.classList.add('hidden');
+    if (guideAndroid) guideAndroid.classList.remove('hidden');
+  }
+}
+
+

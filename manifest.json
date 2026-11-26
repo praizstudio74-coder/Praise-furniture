@@ -3,11 +3,24 @@
   "short_name": "Praise Furniture",
   "description": "Luxurious handcrafted modern furniture, luxury interiors, and bespoke home furniture solutions.",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#251D1A",
   "theme_color": "#C5A059",
   "orientation": "portrait-primary",
   "icons": [
+    {
+      "src": "assets/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
     {
       "src": "assets/images/inspiration-flyer.jpg",
       "sizes": "512x512",
