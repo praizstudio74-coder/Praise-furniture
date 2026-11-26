@@ -1,6 +1,7 @@
 /**
- * PRAISE FURNITURE - E-COMMERCE STORE ENGINE
- * Manages Products, Currencies, Shopping Cart, Wishlist, Quick View & Checkout
+ * PRAISE FURNITURE - E-COMMERCE & CLIENT WEBAPP ENGINE
+ * Manages: Products, Currencies, Shopping Cart, Wishlist, Quick View,
+ * Customer Authentication (Sign In / Sign Up), Client Portal & Orders
  */
 
 const PRAISE_PRODUCTS = [
@@ -359,7 +360,6 @@ function setCurrency(currencyCode) {
     localStorage.setItem('praise_currency', currencyCode);
     window.dispatchEvent(new CustomEvent('currencyChanged', { detail: { currency: currencyCode } }));
     renderCart();
-    // Update displayed prices on current page
     document.querySelectorAll('[data-product-price]').forEach(el => {
       const basePrice = parseFloat(el.getAttribute('data-product-price'));
       el.textContent = formatPrice(basePrice);
@@ -372,6 +372,188 @@ function formatPrice(amountInUSD) {
   const curr = CURRENCIES[currentCurrency] || CURRENCIES.USD;
   const converted = Math.round(amountInUSD * curr.rate);
   return `${curr.symbol}${converted.toLocaleString()}`;
+}
+
+// --- CUSTOMER AUTHENTICATION & MEMBERSHIP PORTAL ---
+const DEMO_USER = {
+  name: "Alexander Vanderbilt",
+  email: "alexander.v@luxuryresidence.com",
+  phone: "+1 (555) 789-2340",
+  city: "New York",
+  tier: "Atelier Privilege Member",
+  points: 1250,
+  joined: "March 2024",
+  address: "740 Park Avenue, Penthouse B, New York, NY 10021"
+};
+
+function getCurrentUser() {
+  try {
+    const user = localStorage.getItem('praise_user');
+    return user ? JSON.parse(user) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function setCurrentUser(user) {
+  if (user) {
+    localStorage.setItem('praise_user', JSON.stringify(user));
+  } else {
+    localStorage.removeItem('praise_user');
+  }
+  updateAuthUI();
+}
+
+function getUsers() {
+  try {
+    const users = localStorage.getItem('praise_users');
+    return users ? JSON.parse(users) : [DEMO_USER];
+  } catch (e) {
+    return [DEMO_USER];
+  }
+}
+
+function saveUserToDatabase(user) {
+  const users = getUsers();
+  const existingIdx = users.findIndex(u => u.email.toLowerCase() === user.email.toLowerCase());
+  if (existingIdx > -1) {
+    users[existingIdx] = { ...users[existingIdx], ...user };
+  } else {
+    users.push(user);
+  }
+  localStorage.setItem('praise_users', JSON.stringify(users));
+}
+
+function handleSignUp(formData) {
+  const name = formData.get('fullName') || 'Valued Member';
+  const email = (formData.get('email') || '').trim();
+  const phone = formData.get('phone') || '';
+  const city = formData.get('city') || 'New York';
+  const password = formData.get('password') || '';
+  const isPrivilege = formData.get('privilegeClub') === 'on';
+
+  if (!email || !password) {
+    showToast('Please provide a valid email and password.', 'error');
+    return false;
+  }
+
+  const newUser = {
+    name: name,
+    email: email,
+    phone: phone,
+    city: city,
+    tier: isPrivilege ? "Atelier Privilege Member" : "Registered Client",
+    points: isPrivilege ? 500 : 100,
+    joined: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+    address: `${city} Flagship Client Residence`
+  };
+
+  saveUserToDatabase(newUser);
+  setCurrentUser(newUser);
+  closeAuthModal();
+  showToast(`Welcome to Praise Furniture, ${name}! Your account is active.`);
+  return true;
+}
+
+function handleSignIn(email, password) {
+  const cleanEmail = (email || '').trim().toLowerCase();
+  const users = getUsers();
+  const found = users.find(u => u.email.toLowerCase() === cleanEmail);
+
+  if (found) {
+    setCurrentUser(found);
+    closeAuthModal();
+    showToast(`Welcome back, ${found.name}.`);
+    return true;
+  } else {
+    // If not found, create a VIP account for ease of testing
+    const autoUser = {
+      name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      email: email,
+      phone: "+1 (555) 902-1820",
+      city: "New York",
+      tier: "Atelier Privilege Member",
+      points: 750,
+      joined: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+      address: "Primary Residence"
+    };
+    saveUserToDatabase(autoUser);
+    setCurrentUser(autoUser);
+    closeAuthModal();
+    showToast(`Welcome to Praise Furniture, ${autoUser.name}!`);
+    return true;
+  }
+}
+
+function loginAsDemoUser() {
+  setCurrentUser(DEMO_USER);
+  closeAuthModal();
+  showToast(`Signed in as ${DEMO_USER.name} (VIP Demo Mode).`);
+}
+
+function handleSignOut() {
+  setCurrentUser(null);
+  closeClientPortalModal();
+  showToast('You have signed out of your Atelier account.');
+}
+
+function getInitials(name) {
+  if (!name) return 'PF';
+  const parts = name.trim().split(' ');
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+}
+
+function updateAuthUI() {
+  const user = getCurrentUser();
+  const guestTriggers = document.querySelectorAll('.auth-trigger-guest');
+  const userTriggers = document.querySelectorAll('.auth-trigger-user');
+
+  if (user) {
+    guestTriggers.forEach(el => el.classList.add('hidden'));
+    userTriggers.forEach(el => {
+      el.classList.remove('hidden');
+      const initialsEl = el.querySelector('.user-avatar-initials');
+      if (initialsEl) initialsEl.textContent = getInitials(user.name);
+      const nameEl = el.querySelector('.user-display-name');
+      if (nameEl) nameEl.textContent = user.name.split(' ')[0];
+    });
+  } else {
+    guestTriggers.forEach(el => el.classList.remove('hidden'));
+    userTriggers.forEach(el => el.classList.add('hidden'));
+  }
+}
+
+// --- ORDER HISTORY MANAGEMENT ---
+function getOrders() {
+  try {
+    const orders = localStorage.getItem('praise_orders');
+    if (orders) return JSON.parse(orders);
+  } catch (e) {}
+
+  // Initial demonstration orders for luxury immersion
+  return [
+    {
+      orderId: 'PF-849201',
+      date: 'November 14, 2026',
+      items: [
+        { name: 'Aurelia Curved Bouclé Sofa', finish: 'Ivory Bouclé', qty: 1, price: 3850, image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=85' },
+        { name: 'Kyoto Fluted Oak Coffee Table', finish: 'Smoked Oak & Travertine', qty: 1, price: 1850, image: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=400&q=85' }
+      ],
+      total: 5700,
+      status: 'Scheduled White-Glove Transit',
+      stepIndex: 3,
+      trackingDate: 'November 28, 2026'
+    }
+  ];
+}
+
+function saveOrder(order) {
+  const orders = getOrders();
+  orders.unshift(order);
+  localStorage.setItem('praise_orders', JSON.stringify(orders));
 }
 
 // --- CART & WISHLIST STORAGE ---
@@ -506,7 +688,7 @@ function calculateCartTotals() {
   // Free white-glove delivery on orders over $3000 USD
   const freeShippingThreshold = 3000;
   const shipping = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 250;
-  const tax = (subtotal - discount) * 0.08; // 8% estimated luxury tax
+  const tax = (subtotal - discount) * 0.08;
   const total = subtotal - discount + shipping + tax;
 
   return {
@@ -779,7 +961,7 @@ function openQuickView(productId) {
           </div>
 
           <button onclick="handleQuickViewAddToCart('${product.id}')" class="flex-1 btn-luxury-gold py-3 px-6 rounded-lg text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2">
-            <span>Add to Cart</span>
+            <span>Add to Bag</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
           </button>
           <button onclick="toggleWishlist('${product.id}')" data-wishlist-btn="${product.id}" class="p-3 border border-mocha/40 rounded-lg text-sand hover:text-gold hover:border-gold transition-colors" title="Save to Wishlist">
@@ -832,6 +1014,11 @@ function openCheckoutModal() {
 
   const totals = calculateCartTotals();
   const cart = getCart();
+  const currentUser = getCurrentUser() || DEMO_USER;
+
+  const nameParts = (currentUser.name || 'Alexander Vanderbilt').split(' ');
+  const firstName = nameParts[0] || 'Alexander';
+  const lastName = nameParts.slice(1).join(' ') || 'Vanderbilt';
 
   container.innerHTML = `
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 sm:p-10">
@@ -853,39 +1040,39 @@ function openCheckoutModal() {
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label class="block text-[11px] text-sand/80 mb-1">First Name *</label>
-                <input type="text" required value="Alexander" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+                <input type="text" id="chk-first-name" required value="${firstName}" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
               </div>
               <div>
                 <label class="block text-[11px] text-sand/80 mb-1">Last Name *</label>
-                <input type="text" required value="Vanderbilt" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+                <input type="text" id="chk-last-name" required value="${lastName}" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
               </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label class="block text-[11px] text-sand/80 mb-1">Email Address *</label>
-                <input type="email" required value="alexander.v@luxuryresidence.com" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+                <input type="email" id="chk-email" required value="${currentUser.email || 'alexander.v@luxuryresidence.com'}" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
               </div>
               <div>
                 <label class="block text-[11px] text-sand/80 mb-1">Direct Phone *</label>
-                <input type="tel" required value="+1 (555) 789-2340" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+                <input type="tel" id="chk-phone" required value="${currentUser.phone || '+1 (555) 789-2340'}" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
               </div>
             </div>
             <div>
               <label class="block text-[11px] text-sand/80 mb-1">Street Address *</label>
-              <input type="text" required value="740 Park Avenue, Penthouse B" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+              <input type="text" id="chk-address" required value="${currentUser.address || '740 Park Avenue, Penthouse B'}" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
             </div>
             <div class="grid grid-cols-3 gap-3">
               <div>
                 <label class="block text-[11px] text-sand/80 mb-1">City</label>
-                <input type="text" required value="New York" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+                <input type="text" id="chk-city" required value="${currentUser.city || 'New York'}" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
               </div>
               <div>
                 <label class="block text-[11px] text-sand/80 mb-1">State / Province</label>
-                <input type="text" required value="NY" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+                <input type="text" id="chk-state" required value="NY" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
               </div>
               <div>
                 <label class="block text-[11px] text-sand/80 mb-1">Postal Code</label>
-                <input type="text" required value="10021" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
+                <input type="text" id="chk-zip" required value="10021" class="w-full bg-dark-taupe/40 border border-mocha/40 rounded px-3 py-2 text-xs text-ivory focus:outline-none focus:border-gold" />
               </div>
             </div>
           </div>
@@ -1041,6 +1228,45 @@ function processCheckoutSubmission() {
     const orderNumber = 'PF-' + Math.floor(100000 + Math.random() * 900000);
     const totals = calculateCartTotals();
     const cart = getCart();
+    const currentUser = getCurrentUser();
+
+    const firstName = document.getElementById('chk-first-name')?.value || 'Alexander';
+    const lastName = document.getElementById('chk-last-name')?.value || 'Vanderbilt';
+    const email = document.getElementById('chk-email')?.value || (currentUser ? currentUser.email : 'alexander.v@luxuryresidence.com');
+    const street = document.getElementById('chk-address')?.value || '740 Park Avenue, Penthouse B';
+    const city = document.getElementById('chk-city')?.value || 'New York';
+    const state = document.getElementById('chk-state')?.value || 'NY';
+    const zip = document.getElementById('chk-zip')?.value || '10021';
+    const fullAddress = `${street}, ${city}, ${state} ${zip}`;
+
+    // Save order into customer's order history
+    const newOrder = {
+      orderId: orderNumber,
+      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+      items: cart.map(i => ({ name: i.name, finish: i.finish, qty: i.quantity, price: i.price, image: i.image })),
+      total: totals.total,
+      address: fullAddress,
+      email: email,
+      status: 'Handcrafted in Atelier',
+      stepIndex: 1,
+      trackingDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+    };
+
+    saveOrder(newOrder);
+
+    // If no user is logged in, auto-link this client
+    if (!currentUser) {
+      setCurrentUser({
+        name: `${firstName} ${lastName}`.trim(),
+        email: email,
+        phone: document.getElementById('chk-phone')?.value || '+1 (555) 789-2340',
+        city: city,
+        tier: "Atelier Privilege Member",
+        points: Math.round(totals.total / 10),
+        joined: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+        address: fullAddress
+      });
+    }
 
     const container = document.getElementById('checkout-flow-container');
     if (container) {
@@ -1062,11 +1288,11 @@ function processCheckoutSubmission() {
             </div>
             <div class="flex justify-between border-b border-mocha/20 pb-2">
               <span class="text-sand">Estimated Delivery</span>
-              <span class="text-ivory font-medium">10–14 Business Days</span>
+              <span class="text-ivory font-medium">10–14 Business Days (${newOrder.trackingDate})</span>
             </div>
             <div class="flex justify-between border-b border-mocha/20 pb-2">
-              <span class="text-sand">Delivery Address</span>
-              <span class="text-ivory font-medium">740 Park Avenue, Penthouse B, New York, NY</span>
+              <span class="text-sand">Delivery Destination</span>
+              <span class="text-ivory font-medium">${fullAddress}</span>
             </div>
             <div class="flex justify-between pt-1 text-sm font-semibold text-ivory">
               <span>Total Authorized</span>
@@ -1074,11 +1300,11 @@ function processCheckoutSubmission() {
             </div>
           </div>
 
-          <p class="text-xs text-sand/60">A copy of your formal acquisition receipt and scheduled white-glove window has been dispatched to <strong class="text-ivory">alexander.v@luxuryresidence.com</strong>.</p>
+          <p class="text-xs text-sand/60">A copy of your formal acquisition receipt and scheduled white-glove window has been dispatched to <strong class="text-ivory">${email}</strong>.</p>
 
           <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-            <button onclick="closeCheckoutModal(); window.location.href='index.html';" class="btn-luxury-gold px-8 py-3 rounded-lg text-xs font-bold tracking-widest uppercase">
-              Return to Showroom
+            <button onclick="closeCheckoutModal(); openClientPortalModal('orders');" class="btn-luxury-gold px-8 py-3 rounded-lg text-xs font-bold tracking-widest uppercase">
+              Track Order in Portal
             </button>
             <button onclick="window.print();" class="btn-luxury-outline px-6 py-3 rounded-lg text-xs font-bold tracking-widest uppercase">
               Print Receipt
@@ -1090,7 +1316,7 @@ function processCheckoutSubmission() {
       // Clear Cart
       saveCart([]);
       if (activePromo) removePromoCode();
-      showToast('Order confirmed successfully! White-glove concierge notified.');
+      showToast('Order confirmed successfully! Added to your client account.');
     }
   }, 1200);
 }
@@ -1101,6 +1327,263 @@ function closeCheckoutModal() {
     modal.classList.add('hidden');
     document.body.classList.remove('overflow-hidden');
   }
+}
+
+// --- AUTH & CLIENT PORTAL MODALS ---
+function openAuthModal(tab = 'signin') {
+  const modal = document.getElementById('auth-modal');
+  if (!modal) return;
+  switchAuthTab(tab);
+  modal.classList.remove('hidden');
+  document.body.classList.add('overflow-hidden');
+}
+
+function closeAuthModal() {
+  const modal = document.getElementById('auth-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+}
+
+function switchAuthTab(tab) {
+  const signinBtn = document.getElementById('auth-tab-signin');
+  const signupBtn = document.getElementById('auth-tab-signup');
+  const signinForm = document.getElementById('auth-form-signin');
+  const signupForm = document.getElementById('auth-form-signup');
+
+  if (tab === 'signup') {
+    if (signinBtn) signinBtn.className = 'flex-1 py-3 text-xs font-semibold uppercase tracking-wider text-sand/60 hover:text-sand border-b-2 border-transparent transition-colors';
+    if (signupBtn) signupBtn.className = 'flex-1 py-3 text-xs font-semibold uppercase tracking-wider text-gold border-b-2 border-gold transition-colors';
+    if (signinForm) signinForm.classList.add('hidden');
+    if (signupForm) signupForm.classList.remove('hidden');
+  } else {
+    if (signinBtn) signinBtn.className = 'flex-1 py-3 text-xs font-semibold uppercase tracking-wider text-gold border-b-2 border-gold transition-colors';
+    if (signupBtn) signupBtn.className = 'flex-1 py-3 text-xs font-semibold uppercase tracking-wider text-sand/60 hover:text-sand border-b-2 border-transparent transition-colors';
+    if (signinForm) signinForm.classList.remove('hidden');
+    if (signupForm) signupForm.classList.add('hidden');
+  }
+}
+
+function openClientPortalModal(tab = 'profile') {
+  const modal = document.getElementById('client-portal-modal');
+  if (!modal) return;
+  renderClientPortal(tab);
+  modal.classList.remove('hidden');
+  document.body.classList.add('overflow-hidden');
+}
+
+function closeClientPortalModal() {
+  const modal = document.getElementById('client-portal-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+}
+
+function renderClientPortal(activeTab = 'profile') {
+  const user = getCurrentUser() || DEMO_USER;
+  const orders = getOrders();
+  const wishlist = getWishlist();
+  const container = document.getElementById('client-portal-content');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="p-6 sm:p-8 space-y-6">
+      <!-- Portal Header -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-mocha/30">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold to-mocha flex items-center justify-center p-0.5 shadow-xl">
+            <div class="w-full h-full bg-espresso rounded-[14px] flex items-center justify-center font-serif text-2xl font-bold text-gold">
+              ${getInitials(user.name)}
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-serif-luxury text-2xl text-ivory">${user.name}</h3>
+              <span class="px-2.5 py-0.5 rounded-full bg-gold/15 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider">${user.tier}</span>
+            </div>
+            <p class="text-xs text-sand/70 mt-0.5">${user.email} • Client since ${user.joined || '2026'}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="text-right hidden sm:block">
+            <span class="text-[10px] uppercase text-sand/60 block">Reward Points</span>
+            <span class="text-gold font-mono font-bold text-sm">${(user.points || 1250).toLocaleString()} pts</span>
+          </div>
+          <button onclick="handleSignOut()" class="btn-luxury-outline px-4 py-2 rounded-lg text-xs font-semibold hover:text-red-400 hover:border-red-400">
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+      <!-- Portal Tabs Navigation -->
+      <div class="flex border-b border-mocha/20 gap-6 text-xs uppercase tracking-wider font-semibold">
+        <button onclick="renderClientPortal('profile')" class="pb-3 border-b-2 ${activeTab === 'profile' ? 'border-gold text-gold' : 'border-transparent text-sand/60 hover:text-sand'} transition-colors">
+          Profile & Membership
+        </button>
+        <button onclick="renderClientPortal('orders')" class="pb-3 border-b-2 ${activeTab === 'orders' ? 'border-gold text-gold' : 'border-transparent text-sand/60 hover:text-sand'} transition-colors flex items-center gap-1.5">
+          <span>Acquisitions & Orders</span>
+          <span class="px-1.5 py-0.2 rounded-full bg-mocha/30 text-gold text-[10px]">${orders.length}</span>
+        </button>
+        <button onclick="renderClientPortal('addresses')" class="pb-3 border-b-2 ${activeTab === 'addresses' ? 'border-gold text-gold' : 'border-transparent text-sand/60 hover:text-sand'} transition-colors">
+          Delivery Residences
+        </button>
+        <button onclick="renderClientPortal('wishlist')" class="pb-3 border-b-2 ${activeTab === 'wishlist' ? 'border-gold text-gold' : 'border-transparent text-sand/60 hover:text-sand'} transition-colors flex items-center gap-1.5">
+          <span>Saved Wishlist</span>
+          <span class="px-1.5 py-0.2 rounded-full bg-mocha/30 text-gold text-[10px]">${wishlist.length}</span>
+        </button>
+      </div>
+
+      <!-- Tab Content: Profile -->
+      ${activeTab === 'profile' ? `
+        <div class="space-y-6 pt-2">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-4 rounded-xl bg-espresso/80 border border-mocha/30">
+              <span class="text-[10px] uppercase text-sand/60 block">Membership Status</span>
+              <h5 class="font-serif text-lg text-gold font-bold mt-1">${user.tier}</h5>
+              <p class="text-xs text-sand/80 mt-1">Complimentary White-Glove placement & priority atelier queue.</p>
+            </div>
+            <div class="p-4 rounded-xl bg-espresso/80 border border-mocha/30">
+              <span class="text-[10px] uppercase text-sand/60 block">Design Concierge Advisor</span>
+              <h5 class="font-serif text-lg text-ivory font-bold mt-1">Julianne St. Claire</h5>
+              <p class="text-xs text-sand/80 mt-1">Direct: concierge@praisefurniture.com</p>
+            </div>
+            <div class="p-4 rounded-xl bg-espresso/80 border border-mocha/30">
+              <span class="text-[10px] uppercase text-sand/60 block">Preferred Atelier Showroom</span>
+              <h5 class="font-serif text-lg text-ivory font-bold mt-1">${user.city || 'New York'} Flagship</h5>
+              <p class="text-xs text-sand/80 mt-1">VIP private appointments on file.</p>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="flex flex-wrap gap-3 pt-2">
+            <button onclick="closeClientPortalModal(); openConsultationModal('Client Consultation');" class="btn-luxury-gold px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider">
+              Request VIP Design Consultation
+            </button>
+            <button onclick="closeClientPortalModal(); window.location.href='index.html#collection';" class="btn-luxury-outline px-6 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider">
+              Explore New Acquisitions
+            </button>
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Tab Content: Orders -->
+      ${activeTab === 'orders' ? `
+        <div class="space-y-4 pt-2">
+          ${orders.length === 0 ? `
+            <div class="py-12 text-center text-sand/60 text-xs">
+              No recent acquisitions found. Your placed orders will appear here with live white-glove tracking.
+            </div>
+          ` : orders.map(ord => `
+            <div class="p-5 rounded-xl bg-espresso/90 border border-mocha/30 space-y-4">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-mocha/20 pb-3">
+                <div>
+                  <span class="text-gold font-mono font-bold text-sm tracking-wider">${ord.orderId}</span>
+                  <span class="text-xs text-sand/70 ml-2">Ordered on ${ord.date}</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="text-xs text-green-400 font-semibold flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    ${ord.status}
+                  </span>
+                  <span class="font-serif text-base font-bold text-gold">${formatPrice(ord.total)}</span>
+                </div>
+              </div>
+
+              <!-- Tracking Progress Steps -->
+              <div class="py-2">
+                <div class="grid grid-cols-4 gap-2 text-center text-[10px]">
+                  <div class="${(ord.stepIndex || 1) >= 1 ? 'text-gold font-bold' : 'text-sand/40'}">1. Placed</div>
+                  <div class="${(ord.stepIndex || 1) >= 2 ? 'text-gold font-bold' : 'text-sand/40'}">2. Atelier Crafting</div>
+                  <div class="${(ord.stepIndex || 1) >= 3 ? 'text-gold font-bold' : 'text-sand/40'}">3. White-Glove Transit</div>
+                  <div class="${(ord.stepIndex || 1) >= 4 ? 'text-gold font-bold' : 'text-sand/40'}">4. Delivered & Staged</div>
+                </div>
+                <div class="w-full bg-dark-taupe/40 h-1.5 rounded-full overflow-hidden mt-2">
+                  <div class="bg-gradient-to-r from-mocha to-gold h-full" style="width: ${((ord.stepIndex || 1) / 4) * 100}%"></div>
+                </div>
+              </div>
+
+              <!-- Items in Order -->
+              <div class="space-y-2 pt-2">
+                ${ord.items.map(it => `
+                  <div class="flex items-center gap-3 text-xs">
+                    <img src="${it.image}" alt="${it.name}" class="w-12 h-12 rounded object-cover border border-mocha/20" />
+                    <div class="flex-1 min-w-0">
+                      <h6 class="text-ivory font-medium truncate">${it.name}</h6>
+                      <p class="text-sand/60 text-[11px]">${it.finish} • Qty: ${it.qty}</p>
+                    </div>
+                    <span class="text-sand font-medium">${formatPrice(it.price * it.qty)}</span>
+                  </div>
+                `).join('')}
+              </div>
+
+              <div class="flex items-center justify-between text-xs text-sand/70 pt-3 border-t border-mocha/20">
+                <span>Destination: <strong class="text-ivory">${ord.address || '740 Park Avenue, New York'}</strong></span>
+                <button onclick="window.print()" class="text-gold hover:underline text-xs">Print Official Invoice</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      <!-- Tab Content: Addresses -->
+      ${activeTab === 'addresses' ? `
+        <div class="space-y-4 pt-2">
+          <div class="p-5 rounded-xl bg-espresso/90 border border-gold/40 flex justify-between items-start">
+            <div class="space-y-1 text-xs">
+              <span class="px-2 py-0.5 bg-gold/15 border border-gold/30 text-gold text-[10px] font-bold uppercase rounded">Primary Residence</span>
+              <h5 class="text-sm font-bold text-ivory mt-2">${user.name}</h5>
+              <p class="text-sand/80">${user.address || '740 Park Avenue, Penthouse B'}</p>
+              <p class="text-sand/80">${user.city || 'New York'}, NY 10021</p>
+              <p class="text-sand/60 mt-1">${user.phone || '+1 (555) 789-2340'}</p>
+            </div>
+            <button onclick="showToast('Address editing saved.');" class="btn-luxury-outline px-3 py-1.5 rounded text-xs">Edit</button>
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Tab Content: Wishlist -->
+      ${activeTab === 'wishlist' ? `
+        <div class="space-y-4 pt-2">
+          ${wishlist.length === 0 ? `
+            <div class="py-12 text-center text-sand/60 text-xs">
+              Your wishlist is empty. Tap the heart on any furniture piece to save it to your private portfolio.
+            </div>
+          ` : `
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              ${wishlist.map(id => {
+                const prod = PRAISE_PRODUCTS.find(p => p.id === id);
+                if (!prod) return '';
+                return `
+                  <div class="p-3 rounded-xl bg-espresso/90 border border-mocha/30 flex items-center gap-3">
+                    <img src="${prod.image}" alt="${prod.name}" class="w-16 h-16 rounded object-cover" />
+                    <div class="flex-1 min-w-0">
+                      <h6 class="text-xs font-serif-luxury text-ivory truncate">${prod.name}</h6>
+                      <p class="text-xs font-bold text-gold mt-0.5">${formatPrice(prod.price)}</p>
+                      <button onclick="addToCart('${prod.id}'); closeClientPortalModal();" class="text-[10px] uppercase font-bold text-sand hover:text-gold mt-1">Move to Bag →</button>
+                    </div>
+                    <button onclick="toggleWishlist('${prod.id}'); renderClientPortal('wishlist');" class="text-sand/50 hover:text-red-400 p-1">✕</button>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `}
+        </div>
+      ` : ''}
+
+    </div>
+  `;
+}
+
+// Global copy utility for promo codes
+function copyPromoCode(code) {
+  navigator.clipboard.writeText(code).then(() => {
+    showToast(`Code "${code}" copied to clipboard! Paste at checkout.`);
+    applyPromoCode(code);
+    openCart();
+  });
 }
 
 // --- TOAST NOTIFICATION UTILITY ---
@@ -1138,4 +1621,5 @@ function showToast(message, type = 'success') {
 document.addEventListener('DOMContentLoaded', () => {
   updateBadges();
   updateWishlistButtons();
+  updateAuthUI();
 });

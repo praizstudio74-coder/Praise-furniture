@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initCategoryFilters();
   initGalleryFilters();
   initContactForm();
+  initServiceWorker();
+  initPWAInstall();
 });
 
 // --- 1. STICKY HEADER ---
@@ -367,3 +369,63 @@ function initNewsletterForm() {
     });
   });
 }
+
+// --- 9. PWA SERVICE WORKER REGISTRATION ---
+function initServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').then((reg) => {
+        console.log('Praise Furniture PWA registered:', reg.scope);
+      }).catch((err) => {
+        console.log('PWA ServiceWorker registration failed:', err);
+      });
+    });
+  }
+}
+
+// --- 10. PWA INSTALL BANNER & TRIGGER ---
+let deferredInstallPrompt = null;
+
+function initPWAInstall() {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    // Show install buttons if available
+    document.querySelectorAll('.pwa-install-btn').forEach(btn => {
+      btn.classList.remove('hidden');
+    });
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    if (typeof showToast === 'function') {
+      showToast('Praise Furniture WebApp installed successfully!');
+    }
+  });
+}
+
+function installPWAApp() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        if (typeof showToast === 'function') {
+          showToast('Installing Praise Furniture App...');
+        }
+      }
+      deferredInstallPrompt = null;
+    });
+  } else {
+    if (typeof showToast === 'function') {
+      showToast('App is ready! To install, use your browser’s "Add to Home Screen" or Install icon.');
+    }
+  }
+}
+
+// --- 11. PASSWORD VISIBILITY TOGGLE ---
+function togglePasswordVisibility(inputId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+

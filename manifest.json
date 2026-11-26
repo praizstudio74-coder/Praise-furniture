@@ -1,0 +1,19 @@
+{
+  "name": "Praise Furniture — Luxury Home & Interior Design",
+  "short_name": "Praise Furniture",
+  "description": "Luxurious handcrafted modern furniture, luxury interiors, and bespoke home furniture solutions.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#251D1A",
+  "theme_color": "#C5A059",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/images/inspiration-flyer.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "shopping", "home"]
+}

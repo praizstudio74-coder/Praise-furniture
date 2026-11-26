@@ -291,13 +291,18 @@ body {
   box-shadow: 0 12px 30px rgba(197, 160, 89, 0.4);
 }
 
+.btn-luxury-gold:active {
+  transform: scale(0.97) translateY(0);
+  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3);
+}
+
 .btn-luxury-outline {
   position: relative;
   border: 1px solid rgba(210, 187, 165, 0.4);
   color: var(--color-ivory);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  transition: all 0.4s var(--transition-smooth);
+  transition: all 0.3s var(--transition-smooth);
   backdrop-filter: blur(8px);
 }
 
@@ -307,6 +312,20 @@ body {
   color: #FFFFFF;
   transform: translateY(-2px);
 }
+
+.btn-luxury-outline:active {
+  transform: scale(0.97) translateY(0);
+}
+
+/* Dynamic Auth Triggers */
+.auth-trigger-guest, .auth-trigger-user {
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.auth-trigger-guest:active, .auth-trigger-user:active {
+  transform: scale(0.95);
+}
+
 
 /* Floating Badges */
 @keyframes floatGentle {

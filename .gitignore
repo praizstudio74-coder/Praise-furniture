@@ -10,3 +10,5 @@ Thumbs.db
 serve.ps1
 tcp-server.ps1
 Launch Website.bat
+*.ps1
+*.bat
